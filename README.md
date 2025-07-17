@@ -82,11 +82,14 @@ src/
 
 ### Development Scripts
 
-- `npm run build` - Compile TypeScript to JavaScript
-- `npm run dev` - Run TypeScript compiler in watch mode
+- `npm run dev` - Start Vite development server
+- `npm run build` - Build for production (TypeScript + Vite)
+- `npm run preview` - Preview production build locally
 - `npm run lint` - Run ESLint and fix issues automatically
 - `npm run lint:check` - Check code style without fixing
 - `npm run type-check` - Run TypeScript type checking
+- `npm run test` - Run Jest tests
+- `npm run test:watch` - Run Jest tests in watch mode
 
 ### Building for Production
 
@@ -94,7 +97,51 @@ src/
 npm run build
 ```
 
-The compiled JavaScript will be output to the `dist/` directory.
+The compiled application will be output to the `dist/` directory, ready for deployment.
+
+### Development
+
+```bash
+npm run dev
+```
+
+Starts the Vite development server at `http://localhost:3000/`
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+Serves the production build locally for testing at `http://localhost:4173/`
+
+## Deployment
+
+### Vercel Deployment
+
+This application is configured for seamless deployment on Vercel:
+
+1. **Connect Repository**: Link your GitHub repository to Vercel
+2. **Automatic Deployment**: Vercel will automatically detect the Vite framework
+3. **Build Configuration**: The `vercel.json` file contains optimized build settings
+4. **Environment Variables**: Set up any required API keys in Vercel dashboard
+
+The deployment configuration:
+- **Framework**: Vite
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Install Command**: `npm install`
+
+### Manual Deployment
+
+For other platforms, use the production build:
+
+```bash
+npm run build
+npm run preview  # Test locally first
+```
+
+Then deploy the contents of the `dist/` directory to your hosting platform.
 
 ## API Integration
 
