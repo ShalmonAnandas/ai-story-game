@@ -1,0 +1,39 @@
+{
+  "name": "ai-story-game",
+  "version": "1.0.0",
+  "description": "An interactive AI-powered story generation game with video creation capabilities",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/**/*.{ts,tsx} --fix",
+    "lint:check": "eslint src/**/*.{ts,tsx}",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [
+    "ai",
+    "story",
+    "game",
+    "react",
+    "typescript",
+    "gemini"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "typescript": "^5.0.0"
+  }
+}
