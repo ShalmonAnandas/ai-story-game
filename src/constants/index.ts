@@ -25,7 +25,7 @@ export const UI_CONFIG = {
   WORDS_COUNT: 5,
   TEMPERATURE: 0.8,
   IMAGE_GENERATION_DELAY: 2000,
-  IMAGEN_MODEL: 'models/imagen-4.0-generate-preview-06-06',
+  IMAGEN_MODEL: 'models/imagen-3.0-generate-002',
 } as const;
 
 export const CSS_CLASSES = {
