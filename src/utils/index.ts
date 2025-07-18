@@ -152,7 +152,7 @@ export const generateImagesForStory = async (
       const fullPrompt = `${imagePrompt}. Scene: ${sentence}`;
       
       const response = await ai.models.generateImages({
-        model: 'models/imagen-4.0-generate-preview-06-06',
+        model: 'models/imagen-3.0-generate-002',
         prompt: fullPrompt,
         config: {
           numberOfImages: 1,
