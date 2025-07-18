@@ -67,7 +67,9 @@ export const generateStory = async (
   storyPrompt: string,
   temperature: number = 0.8
 ): Promise<string> => {
-  const systemPrompt = `Write a 500-1000 word story using these five words: ${words.join(', ')}. The story should follow this prompt: "${storyPrompt}". Include vivid descriptions and dialogue.`;
+  const systemPrompt = `Write a 500-1000 word story using these five words: ${words.join(', ')}. The story should follow this prompt: "${storyPrompt}". Include vivid descriptions and dialogue. 
+
+IMPORTANT: After each complete sentence, add the marker [SENTENCE_BREAK] to help with image generation. For example: "The cat sat on the mat.[SENTENCE_BREAK] It was a sunny day.[SENTENCE_BREAK]" Do NOT add the marker within sentences or dialogue, only at the end of complete sentences.`;
   
   const payload: GeminiAPIRequest = {
     contents: [{ role: "user", parts: [{ text: systemPrompt }] }],
@@ -106,12 +108,19 @@ export const generateStory = async (
 };
 
 /**
- * Splits a story into sentences for image generation
+ * Filters out sentence separators from the story for display
+ */
+export const filterSeparatorsFromStory = (story: string): string => {
+  return story.replace(/\[SENTENCE_BREAK\]/g, '');
+};
+
+/**
+ * Splits a story into sentences using separators for image generation
  */
 export const splitStoryIntoSentences = (story: string): string[] => {
-  // Split by sentence endings, keeping the ending punctuation
+  // Split by sentence separators, then clean up and filter empty sentences
   const sentences = story
-    .split(/(?<=[.!?])\s+/)
+    .split('[SENTENCE_BREAK]')
     .map(sentence => sentence.trim())
     .filter(sentence => sentence.length > 0);
   

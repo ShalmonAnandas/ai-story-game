@@ -3,6 +3,7 @@
 import React from 'react';
 import { Spinner } from './UI';
 import { ImageSlideshow } from './ImageSlideshow';
+import { filterSeparatorsFromStory } from '../utils';
 import type { GeneratedImage } from '../types';
 
 interface StoryDisplayProps {
@@ -50,7 +51,7 @@ export const StoryDisplay: React.FC<StoryDisplayProps> = ({
           </div>
         ) : generatedStory ? (
           <div className="prose prose-gray max-w-none">
-            <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">{generatedStory}</p>
+            <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">{filterSeparatorsFromStory(generatedStory)}</p>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-gray-500">
