@@ -15,19 +15,19 @@ export const App: React.FC = () => {
     apiKey,
     words,
     storyPrompt,
-    videoPrompt,
+    imagePrompt,
     generatedStory,
-    generatedVideoUrl,
+    generatedImages,
     isGeneratingStory,
-    isGeneratingVideo,
+    isGeneratingImages,
     error,
     setApiKey,
     setStoryPrompt,
-    setVideoPrompt,
+    setImagePrompt,
     handleWordChange,
     fetchRandomWords,
     handleGenerateStory,
-    handleGenerateVideo,
+    handleGenerateImages,
   } = useStoryGame();
 
   return (
@@ -76,15 +76,15 @@ export const App: React.FC = () => {
             onGenerateStory={handleGenerateStory}
           />
 
-          {/* Story Display and Video Section */}
+          {/* Story Display and Image Slideshow Section */}
           <StoryDisplay
             generatedStory={generatedStory}
-            videoPrompt={videoPrompt}
-            generatedVideoUrl={generatedVideoUrl}
+            imagePrompt={imagePrompt}
+            generatedImages={generatedImages}
             isGeneratingStory={isGeneratingStory}
-            isGeneratingVideo={isGeneratingVideo}
-            onVideoPromptChange={setVideoPrompt}
-            onGenerateVideo={handleGenerateVideo}
+            isGeneratingImages={isGeneratingImages}
+            onImagePromptChange={setImagePrompt}
+            onGenerateImages={handleGenerateImages}
           />
         </div>
       </div>

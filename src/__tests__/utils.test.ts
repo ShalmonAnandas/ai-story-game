@@ -1,6 +1,6 @@
 // Tests for utility functions
 
-import { validateStoryInputs, validateVideoInputs } from '../utils';
+import { validateStoryInputs, validateImageInputs } from '../utils';
 import { VALIDATION_MESSAGES } from '../constants';
 
 describe('Utility Functions', () => {
@@ -26,19 +26,19 @@ describe('Utility Functions', () => {
     });
   });
 
-  describe('validateVideoInputs', () => {
+  describe('validateImageInputs', () => {
     it('should return error when story is missing', () => {
-      const result = validateVideoInputs('', 'video prompt');
-      expect(result).toBe(VALIDATION_MESSAGES.STORY_REQUIRED_FOR_VIDEO);
+      const result = validateImageInputs('', 'image prompt');
+      expect(result).toBe(VALIDATION_MESSAGES.STORY_REQUIRED_FOR_IMAGES);
     });
 
-    it('should return error when video prompt is missing', () => {
-      const result = validateVideoInputs('story content', '');
-      expect(result).toBe(VALIDATION_MESSAGES.VIDEO_PROMPT_REQUIRED);
+    it('should return error when image prompt is missing', () => {
+      const result = validateImageInputs('story content', '');
+      expect(result).toBe(VALIDATION_MESSAGES.IMAGE_PROMPT_REQUIRED);
     });
 
     it('should return null when all inputs are valid', () => {
-      const result = validateVideoInputs('story content', 'video prompt');
+      const result = validateImageInputs('story content', 'image prompt');
       expect(result).toBeNull();
     });
   });

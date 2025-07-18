@@ -56,15 +56,23 @@ export interface APIError {
   };
 }
 
+// Image related types
+export interface GeneratedImage {
+  id: string;
+  sentence: string;
+  imageData: string; // base64 encoded image data
+  imageUrl?: string; // optional blob URL for display
+}
+
 // App state types
 export interface AppState {
   apiKey: string;
   words: string[];
   storyPrompt: string;
-  videoPrompt: string;
+  imagePrompt: string;
   generatedStory: string;
-  generatedVideoUrl: string;
+  generatedImages: GeneratedImage[];
   isGeneratingStory: boolean;
-  isGeneratingVideo: boolean;
+  isGeneratingImages: boolean;
   error: string | null;
 }

@@ -1,30 +1,31 @@
-// Story display and video section component
+// Story display and image slideshow section component
 
 import React from 'react';
 import { Spinner } from './UI';
-import { VideoGeneration } from './VideoGeneration';
+import { ImageSlideshow } from './ImageSlideshow';
+import type { GeneratedImage } from '../types';
 
 interface StoryDisplayProps {
   generatedStory: string;
-  videoPrompt: string;
-  generatedVideoUrl: string;
+  imagePrompt: string;
+  generatedImages: GeneratedImage[];
   isGeneratingStory: boolean;
-  isGeneratingVideo: boolean;
-  onVideoPromptChange: (value: string) => void;
-  onGenerateVideo: () => void;
+  isGeneratingImages: boolean;
+  onImagePromptChange: (value: string) => void;
+  onGenerateImages: () => void;
 }
 
 /**
- * Component for displaying generated story and video controls
+ * Component for displaying generated story and image slideshow controls
  */
 export const StoryDisplay: React.FC<StoryDisplayProps> = ({
   generatedStory,
-  videoPrompt,
-  generatedVideoUrl,
+  imagePrompt,
+  generatedImages,
   isGeneratingStory,
-  isGeneratingVideo,
-  onVideoPromptChange,
-  onGenerateVideo,
+  isGeneratingImages,
+  onImagePromptChange,
+  onGenerateImages,
 }) => (
   <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300">
     <div className="flex items-center mb-8">
@@ -64,12 +65,12 @@ export const StoryDisplay: React.FC<StoryDisplayProps> = ({
     </div>
     
     {generatedStory && (
-      <VideoGeneration
-        videoPrompt={videoPrompt}
-        generatedVideoUrl={generatedVideoUrl}
-        isGeneratingVideo={isGeneratingVideo}
-        onVideoPromptChange={onVideoPromptChange}
-        onGenerateVideo={onGenerateVideo}
+      <ImageSlideshow
+        imagePrompt={imagePrompt}
+        generatedImages={generatedImages}
+        isGeneratingImages={isGeneratingImages}
+        onImagePromptChange={onImagePromptChange}
+        onGenerateImages={onGenerateImages}
       />
     )}
   </div>

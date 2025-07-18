@@ -3,12 +3,13 @@
 import { useState, useCallback } from 'react';
 import { 
   validateStoryInputs, 
-  validateVideoInputs, 
+  validateImageInputs, 
   fetchRandomWords as fetchRandomWordsUtil, 
   generateStory as generateStoryUtil,
-  generateVideo as generateVideoUtil
+  generateImagesForStory as generateImagesForStoryUtil
 } from '../utils';
 import { UI_CONFIG } from '../constants';
+import type { GeneratedImage } from '../types';
 
 /**
  * Custom hook that manages all the state and logic for the story game
@@ -18,11 +19,11 @@ export const useStoryGame = () => {
   const [apiKey, setApiKey] = useState<string>('');
   const [words, setWords] = useState<string[]>(['', '', '', '', '']);
   const [storyPrompt, setStoryPrompt] = useState<string>('');
-  const [videoPrompt, setVideoPrompt] = useState<string>('');
+  const [imagePrompt, setImagePrompt] = useState<string>('');
   const [generatedStory, setGeneratedStory] = useState<string>('');
-  const [generatedVideoUrl, setGeneratedVideoUrl] = useState<string>('');
+  const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
   const [isGeneratingStory, setIsGeneratingStory] = useState<boolean>(false);
-  const [isGeneratingVideo, setIsGeneratingVideo] = useState<boolean>(false);
+  const [isGeneratingImages, setIsGeneratingImages] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   /**
@@ -62,6 +63,7 @@ export const useStoryGame = () => {
     setIsGeneratingStory(true);
     setError(null);
     setGeneratedStory('');
+    setGeneratedImages([]); // Clear any existing images
 
     try {
       const story = await generateStoryUtil(apiKey, words, storyPrompt, UI_CONFIG.TEMPERATURE);
@@ -76,54 +78,54 @@ export const useStoryGame = () => {
   }, [apiKey, words, storyPrompt]);
 
   /**
-   * Generates a video based on the story
+   * Generates images based on the story sentences
    */
-  const handleGenerateVideo = useCallback(async (): Promise<void> => {
-    const validationError = validateVideoInputs(generatedStory, videoPrompt);
+  const handleGenerateImages = useCallback(async (): Promise<void> => {
+    const validationError = validateImageInputs(generatedStory, imagePrompt);
     if (validationError) {
       setError(validationError);
       return;
     }
 
-    setIsGeneratingVideo(true);
+    setIsGeneratingImages(true);
     setError(null);
-    setGeneratedVideoUrl('');
+    setGeneratedImages([]);
 
     try {
-      const videoUrl = await generateVideoUtil(
+      const images = await generateImagesForStoryUtil(
+        apiKey,
         generatedStory, 
-        videoPrompt, 
-        UI_CONFIG.VIDEO_GENERATION_DELAY
+        imagePrompt
       );
-      setGeneratedVideoUrl(videoUrl);
+      setGeneratedImages(images);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
       }
     } finally {
-      setIsGeneratingVideo(false);
+      setIsGeneratingImages(false);
     }
-  }, [generatedStory, videoPrompt]);
+  }, [apiKey, generatedStory, imagePrompt]);
 
   return {
     // State
     apiKey,
     words,
     storyPrompt,
-    videoPrompt,
+    imagePrompt,
     generatedStory,
-    generatedVideoUrl,
+    generatedImages,
     isGeneratingStory,
-    isGeneratingVideo,
+    isGeneratingImages,
     error,
     
     // Actions
     setApiKey,
     setStoryPrompt,
-    setVideoPrompt,
+    setImagePrompt,
     handleWordChange,
     fetchRandomWords,
     handleGenerateStory,
-    handleGenerateVideo,
+    handleGenerateImages,
   };
 };

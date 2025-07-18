@@ -24,17 +24,17 @@ export const validateStoryInputs = (
 };
 
 /**
- * Validates if all required fields are filled for video generation
+ * Validates if all required fields are filled for image generation
  */
-export const validateVideoInputs = (
+export const validateImageInputs = (
   generatedStory: string,
-  videoPrompt: string
+  imagePrompt: string
 ): string | null => {
   if (!generatedStory) {
-    return VALIDATION_MESSAGES.STORY_REQUIRED_FOR_VIDEO;
+    return VALIDATION_MESSAGES.STORY_REQUIRED_FOR_IMAGES;
   }
-  if (!videoPrompt.trim()) {
-    return VALIDATION_MESSAGES.VIDEO_PROMPT_REQUIRED;
+  if (!imagePrompt.trim()) {
+    return VALIDATION_MESSAGES.IMAGE_PROMPT_REQUIRED;
   }
   return null;
 };
@@ -103,6 +103,97 @@ export const generateStory = async (
     }
     throw new Error(VALIDATION_MESSAGES.UNKNOWN_ERROR);
   }
+};
+
+/**
+ * Splits a story into sentences for image generation
+ */
+export const splitStoryIntoSentences = (story: string): string[] => {
+  // Split by sentence endings, keeping the ending punctuation
+  const sentences = story
+    .split(/(?<=[.!?])\s+/)
+    .map(sentence => sentence.trim())
+    .filter(sentence => sentence.length > 0);
+  
+  return sentences;
+};
+
+/**
+ * Generates images for story sentences using Gemini Imagen
+ */
+export const generateImagesForStory = async (
+  apiKey: string,
+  story: string,
+  imagePrompt: string
+): Promise<import('../types').GeneratedImage[]> => {
+  const { GoogleGenAI } = await import('@google/genai');
+  
+  const sentences = splitStoryIntoSentences(story);
+  const ai = new GoogleGenAI({
+    apiKey: apiKey,
+  });
+
+  const generatedImages: import('../types').GeneratedImage[] = [];
+
+  for (let i = 0; i < sentences.length; i++) {
+    const sentence = sentences[i];
+    
+    try {
+      // Create a specific prompt for this sentence
+      const fullPrompt = `${imagePrompt}. Scene: ${sentence}`;
+      
+      const response = await ai.models.generateImages({
+        model: 'models/imagen-4.0-generate-preview-06-06',
+        prompt: fullPrompt,
+        config: {
+          numberOfImages: 1,
+          outputMimeType: 'image/jpeg',
+          aspectRatio: '1:1',
+        },
+      });
+
+      if (!response?.generatedImages || response.generatedImages.length === 0) {
+        console.warn(`No image generated for sentence ${i + 1}`);
+        continue;
+      }
+
+      const imageData = response.generatedImages[0]?.image?.imageBytes;
+      if (!imageData) {
+        console.warn(`No image data for sentence ${i + 1}`);
+        continue;
+      }
+
+      // Convert base64 to blob for display
+      const binaryString = atob(imageData);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let j = 0; j < binaryString.length; j++) {
+        bytes[j] = binaryString.charCodeAt(j);
+      }
+      const blob = new Blob([bytes], { type: 'image/jpeg' });
+      const imageUrl = URL.createObjectURL(blob);
+
+      generatedImages.push({
+        id: `image_${i}`,
+        sentence: sentence,
+        imageData: imageData,
+        imageUrl: imageUrl,
+      });
+
+      // Add a small delay between requests to avoid rate limiting
+      if (i < sentences.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    } catch (error) {
+      console.error(`Error generating image for sentence ${i + 1}:`, error);
+      // Continue with next sentence even if one fails
+    }
+  }
+
+  if (generatedImages.length === 0) {
+    throw new Error(VALIDATION_MESSAGES.IMAGE_GENERATION_ERROR);
+  }
+
+  return generatedImages;
 };
 
 /**
