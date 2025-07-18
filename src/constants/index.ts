@@ -9,11 +9,12 @@ export const VALIDATION_MESSAGES = {
   API_KEY_REQUIRED: 'Please enter your Gemini API key.',
   WORDS_REQUIRED: 'Please fill in all 5 words.',
   STORY_PROMPT_REQUIRED: 'Please provide a story prompt.',
-  VIDEO_PROMPT_REQUIRED: 'Please provide a video prompt.',
-  STORY_REQUIRED_FOR_VIDEO: 'Please generate a story first.',
+  IMAGE_PROMPT_REQUIRED: 'Please provide an image style prompt.',
+  STORY_REQUIRED_FOR_IMAGES: 'Please generate a story first.',
   RANDOM_WORDS_FETCH_ERROR: 'Failed to fetch random words.',
   UNKNOWN_ERROR: 'An unknown error occurred.',
   UNEXPECTED_API_RESPONSE: 'The API returned an unexpected response.',
+  IMAGE_GENERATION_ERROR: 'Failed to generate images.',
 } as const;
 
 export const UI_CONFIG = {
@@ -23,8 +24,8 @@ export const UI_CONFIG = {
   },
   WORDS_COUNT: 5,
   TEMPERATURE: 0.8,
-  VIDEO_GENERATION_DELAY: 4000,
-  PLACEHOLDER_VIDEO_URL: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+  IMAGE_GENERATION_DELAY: 2000,
+  IMAGEN_MODEL: 'models/imagen-4.0-generate-preview-06-06',
 } as const;
 
 export const CSS_CLASSES = {
